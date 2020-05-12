@@ -27,20 +27,15 @@ export type Int_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['Int']>>;
 };
 
-export enum Some_Enum {
-  TypeA = 'TYPE_A',
-  TypeB = 'TYPE_B',
-  TypeC = 'TYPE_C'
-}
-
-export type SampleInput = {
-  password: Scalars['String'];
-  username: Scalars['String'];
+export type JsonWebToken = {
+   __typename?: 'JsonWebToken';
+  token: Scalars['String'];
 };
 
-export type SampleOutput = {
-   __typename?: 'SampleOutput';
-  accessToken: Scalars['String'];
+export type SignupResponse = {
+   __typename?: 'SignupResponse';
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 /** expression to compare columns of type String. All fields are combined with logical 'AND'. */
@@ -62,19 +57,6 @@ export type String_Comparison_Exp = {
   _similar?: Maybe<Scalars['String']>;
 };
 
-export type TokenOutput = {
-   __typename?: 'TokenOutput';
-  accessToken: Scalars['String'];
-};
-
-export type UserInfo = {
-  enum_field: Some_Enum;
-  nullable_field?: Maybe<Scalars['Float']>;
-  nullable_list?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  password: Scalars['String'];
-  username: Scalars['String'];
-};
-
 
 /** expression to compare columns of type json. All fields are combined with logical 'AND'. */
 export type Json_Comparison_Exp = {
@@ -92,14 +74,16 @@ export type Json_Comparison_Exp = {
 /** columns and relationships of "meetup" */
 export type Meetup = {
    __typename?: 'meetup';
+  /** An array relationship */
+  comments: Array<Meetup_Comment>;
+  /** An aggregated array relationship */
+  comments_aggregate: Meetup_Comment_Aggregate;
   created_at: Scalars['timestamptz'];
   datetime: Scalars['timestamptz'];
+  description: Scalars['String'];
   id: Scalars['Int'];
+  image_url: Scalars['String'];
   location: Scalars['String'];
-  /** An array relationship */
-  meetup_messages: Array<Meetup_Message>;
-  /** An aggregated array relationship */
-  meetup_messages_aggregate: Meetup_Message_Aggregate;
   /** An array relationship */
   meetup_users: Array<Meetup_User>;
   /** An aggregated array relationship */
@@ -110,22 +94,22 @@ export type Meetup = {
 
 
 /** columns and relationships of "meetup" */
-export type MeetupMeetup_MessagesArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type MeetupCommentsArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** columns and relationships of "meetup" */
-export type MeetupMeetup_Messages_AggregateArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type MeetupComments_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
@@ -215,14 +199,339 @@ export type Meetup_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Meetup_Bool_Exp>>>;
   _not?: Maybe<Meetup_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Meetup_Bool_Exp>>>;
+  comments?: Maybe<Meetup_Comment_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   datetime?: Maybe<Timestamptz_Comparison_Exp>;
+  description?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
+  image_url?: Maybe<String_Comparison_Exp>;
   location?: Maybe<String_Comparison_Exp>;
-  meetup_messages?: Maybe<Meetup_Message_Bool_Exp>;
   meetup_users?: Maybe<Meetup_User_Bool_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+};
+
+/** columns and relationships of "meetup_comment" */
+export type Meetup_Comment = {
+   __typename?: 'meetup_comment';
+  id: Scalars['Int'];
+  /** An object relationship */
+  meetup: Meetup;
+  meetup_id: Scalars['Int'];
+  text: Scalars['String'];
+  /** An object relationship */
+  user: User;
+  user_id: Scalars['Int'];
+};
+
+/** aggregated selection of "meetup_comment" */
+export type Meetup_Comment_Aggregate = {
+   __typename?: 'meetup_comment_aggregate';
+  aggregate?: Maybe<Meetup_Comment_Aggregate_Fields>;
+  nodes: Array<Meetup_Comment>;
+};
+
+/** aggregate fields of "meetup_comment" */
+export type Meetup_Comment_Aggregate_Fields = {
+   __typename?: 'meetup_comment_aggregate_fields';
+  avg?: Maybe<Meetup_Comment_Avg_Fields>;
+  count?: Maybe<Scalars['Int']>;
+  max?: Maybe<Meetup_Comment_Max_Fields>;
+  min?: Maybe<Meetup_Comment_Min_Fields>;
+  stddev?: Maybe<Meetup_Comment_Stddev_Fields>;
+  stddev_pop?: Maybe<Meetup_Comment_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Meetup_Comment_Stddev_Samp_Fields>;
+  sum?: Maybe<Meetup_Comment_Sum_Fields>;
+  var_pop?: Maybe<Meetup_Comment_Var_Pop_Fields>;
+  var_samp?: Maybe<Meetup_Comment_Var_Samp_Fields>;
+  variance?: Maybe<Meetup_Comment_Variance_Fields>;
+};
+
+
+/** aggregate fields of "meetup_comment" */
+export type Meetup_Comment_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Meetup_Comment_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "meetup_comment" */
+export type Meetup_Comment_Aggregate_Order_By = {
+  avg?: Maybe<Meetup_Comment_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Meetup_Comment_Max_Order_By>;
+  min?: Maybe<Meetup_Comment_Min_Order_By>;
+  stddev?: Maybe<Meetup_Comment_Stddev_Order_By>;
+  stddev_pop?: Maybe<Meetup_Comment_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Meetup_Comment_Stddev_Samp_Order_By>;
+  sum?: Maybe<Meetup_Comment_Sum_Order_By>;
+  var_pop?: Maybe<Meetup_Comment_Var_Pop_Order_By>;
+  var_samp?: Maybe<Meetup_Comment_Var_Samp_Order_By>;
+  variance?: Maybe<Meetup_Comment_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "meetup_comment" */
+export type Meetup_Comment_Arr_Rel_Insert_Input = {
+  data: Array<Meetup_Comment_Insert_Input>;
+  on_conflict?: Maybe<Meetup_Comment_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Meetup_Comment_Avg_Fields = {
+   __typename?: 'meetup_comment_avg_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "meetup_comment" */
+export type Meetup_Comment_Avg_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "meetup_comment". All fields are combined with a logical 'AND'. */
+export type Meetup_Comment_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Meetup_Comment_Bool_Exp>>>;
+  _not?: Maybe<Meetup_Comment_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Meetup_Comment_Bool_Exp>>>;
+  id?: Maybe<Int_Comparison_Exp>;
+  meetup?: Maybe<Meetup_Bool_Exp>;
+  meetup_id?: Maybe<Int_Comparison_Exp>;
+  text?: Maybe<String_Comparison_Exp>;
+  user?: Maybe<User_Bool_Exp>;
+  user_id?: Maybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "meetup_comment" */
+export enum Meetup_Comment_Constraint {
+  /** unique or primary key constraint */
+  MeetupCommentPkey = 'meetup_comment_pkey'
+}
+
+/** input type for incrementing integer column in table "meetup_comment" */
+export type Meetup_Comment_Inc_Input = {
+  id?: Maybe<Scalars['Int']>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "meetup_comment" */
+export type Meetup_Comment_Insert_Input = {
+  id?: Maybe<Scalars['Int']>;
+  meetup?: Maybe<Meetup_Obj_Rel_Insert_Input>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  user?: Maybe<User_Obj_Rel_Insert_Input>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate max on columns */
+export type Meetup_Comment_Max_Fields = {
+   __typename?: 'meetup_comment_max_fields';
+  id?: Maybe<Scalars['Int']>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by max() on columns of table "meetup_comment" */
+export type Meetup_Comment_Max_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  text?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Meetup_Comment_Min_Fields = {
+   __typename?: 'meetup_comment_min_fields';
+  id?: Maybe<Scalars['Int']>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "meetup_comment" */
+export type Meetup_Comment_Min_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  text?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "meetup_comment" */
+export type Meetup_Comment_Mutation_Response = {
+   __typename?: 'meetup_comment_mutation_response';
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data of the affected rows by the mutation */
+  returning: Array<Meetup_Comment>;
+};
+
+/** input type for inserting object relation for remote table "meetup_comment" */
+export type Meetup_Comment_Obj_Rel_Insert_Input = {
+  data: Meetup_Comment_Insert_Input;
+  on_conflict?: Maybe<Meetup_Comment_On_Conflict>;
+};
+
+/** on conflict condition type for table "meetup_comment" */
+export type Meetup_Comment_On_Conflict = {
+  constraint: Meetup_Comment_Constraint;
+  update_columns: Array<Meetup_Comment_Update_Column>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "meetup_comment" */
+export type Meetup_Comment_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup?: Maybe<Meetup_Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  text?: Maybe<Order_By>;
+  user?: Maybe<User_Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "meetup_comment" */
+export type Meetup_Comment_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "meetup_comment" */
+export enum Meetup_Comment_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  MeetupId = 'meetup_id',
+  /** column name */
+  Text = 'text',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "meetup_comment" */
+export type Meetup_Comment_Set_Input = {
+  id?: Maybe<Scalars['Int']>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate stddev on columns */
+export type Meetup_Comment_Stddev_Fields = {
+   __typename?: 'meetup_comment_stddev_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "meetup_comment" */
+export type Meetup_Comment_Stddev_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Meetup_Comment_Stddev_Pop_Fields = {
+   __typename?: 'meetup_comment_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "meetup_comment" */
+export type Meetup_Comment_Stddev_Pop_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Meetup_Comment_Stddev_Samp_Fields = {
+   __typename?: 'meetup_comment_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "meetup_comment" */
+export type Meetup_Comment_Stddev_Samp_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Meetup_Comment_Sum_Fields = {
+   __typename?: 'meetup_comment_sum_fields';
+  id?: Maybe<Scalars['Int']>;
+  meetup_id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "meetup_comment" */
+export type Meetup_Comment_Sum_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** update columns of table "meetup_comment" */
+export enum Meetup_Comment_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  MeetupId = 'meetup_id',
+  /** column name */
+  Text = 'text',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** aggregate var_pop on columns */
+export type Meetup_Comment_Var_Pop_Fields = {
+   __typename?: 'meetup_comment_var_pop_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "meetup_comment" */
+export type Meetup_Comment_Var_Pop_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Meetup_Comment_Var_Samp_Fields = {
+   __typename?: 'meetup_comment_var_samp_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "meetup_comment" */
+export type Meetup_Comment_Var_Samp_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Meetup_Comment_Variance_Fields = {
+   __typename?: 'meetup_comment_variance_fields';
+  id?: Maybe<Scalars['Float']>;
+  meetup_id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "meetup_comment" */
+export type Meetup_Comment_Variance_Order_By = {
+  id?: Maybe<Order_By>;
+  meetup_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
 };
 
 /** unique or primary key constraints on table "meetup" */
@@ -238,11 +547,13 @@ export type Meetup_Inc_Input = {
 
 /** input type for inserting data into table "meetup" */
 export type Meetup_Insert_Input = {
+  comments?: Maybe<Meetup_Comment_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   datetime?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  image_url?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
-  meetup_messages?: Maybe<Meetup_Message_Arr_Rel_Insert_Input>;
   meetup_users?: Maybe<Meetup_User_Arr_Rel_Insert_Input>;
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -253,7 +564,9 @@ export type Meetup_Max_Fields = {
    __typename?: 'meetup_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   datetime?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  image_url?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -263,320 +576,12 @@ export type Meetup_Max_Fields = {
 export type Meetup_Max_Order_By = {
   created_at?: Maybe<Order_By>;
   datetime?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  image_url?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
-};
-
-/** columns and relationships of "meetup_message" */
-export type Meetup_Message = {
-   __typename?: 'meetup_message';
-  id: Scalars['Int'];
-  /** An object relationship */
-  meetup: Meetup;
-  meetup_id: Scalars['Int'];
-  /** An object relationship */
-  user: User;
-  user_id: Scalars['Int'];
-};
-
-/** aggregated selection of "meetup_message" */
-export type Meetup_Message_Aggregate = {
-   __typename?: 'meetup_message_aggregate';
-  aggregate?: Maybe<Meetup_Message_Aggregate_Fields>;
-  nodes: Array<Meetup_Message>;
-};
-
-/** aggregate fields of "meetup_message" */
-export type Meetup_Message_Aggregate_Fields = {
-   __typename?: 'meetup_message_aggregate_fields';
-  avg?: Maybe<Meetup_Message_Avg_Fields>;
-  count?: Maybe<Scalars['Int']>;
-  max?: Maybe<Meetup_Message_Max_Fields>;
-  min?: Maybe<Meetup_Message_Min_Fields>;
-  stddev?: Maybe<Meetup_Message_Stddev_Fields>;
-  stddev_pop?: Maybe<Meetup_Message_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Meetup_Message_Stddev_Samp_Fields>;
-  sum?: Maybe<Meetup_Message_Sum_Fields>;
-  var_pop?: Maybe<Meetup_Message_Var_Pop_Fields>;
-  var_samp?: Maybe<Meetup_Message_Var_Samp_Fields>;
-  variance?: Maybe<Meetup_Message_Variance_Fields>;
-};
-
-
-/** aggregate fields of "meetup_message" */
-export type Meetup_Message_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Meetup_Message_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "meetup_message" */
-export type Meetup_Message_Aggregate_Order_By = {
-  avg?: Maybe<Meetup_Message_Avg_Order_By>;
-  count?: Maybe<Order_By>;
-  max?: Maybe<Meetup_Message_Max_Order_By>;
-  min?: Maybe<Meetup_Message_Min_Order_By>;
-  stddev?: Maybe<Meetup_Message_Stddev_Order_By>;
-  stddev_pop?: Maybe<Meetup_Message_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<Meetup_Message_Stddev_Samp_Order_By>;
-  sum?: Maybe<Meetup_Message_Sum_Order_By>;
-  var_pop?: Maybe<Meetup_Message_Var_Pop_Order_By>;
-  var_samp?: Maybe<Meetup_Message_Var_Samp_Order_By>;
-  variance?: Maybe<Meetup_Message_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "meetup_message" */
-export type Meetup_Message_Arr_Rel_Insert_Input = {
-  data: Array<Meetup_Message_Insert_Input>;
-  on_conflict?: Maybe<Meetup_Message_On_Conflict>;
-};
-
-/** aggregate avg on columns */
-export type Meetup_Message_Avg_Fields = {
-   __typename?: 'meetup_message_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "meetup_message" */
-export type Meetup_Message_Avg_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "meetup_message". All fields are combined with a logical 'AND'. */
-export type Meetup_Message_Bool_Exp = {
-  _and?: Maybe<Array<Maybe<Meetup_Message_Bool_Exp>>>;
-  _not?: Maybe<Meetup_Message_Bool_Exp>;
-  _or?: Maybe<Array<Maybe<Meetup_Message_Bool_Exp>>>;
-  id?: Maybe<Int_Comparison_Exp>;
-  meetup?: Maybe<Meetup_Bool_Exp>;
-  meetup_id?: Maybe<Int_Comparison_Exp>;
-  user?: Maybe<User_Bool_Exp>;
-  user_id?: Maybe<Int_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "meetup_message" */
-export enum Meetup_Message_Constraint {
-  /** unique or primary key constraint */
-  MeetupMessagePkey = 'meetup_message_pkey'
-}
-
-/** input type for incrementing integer column in table "meetup_message" */
-export type Meetup_Message_Inc_Input = {
-  id?: Maybe<Scalars['Int']>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "meetup_message" */
-export type Meetup_Message_Insert_Input = {
-  id?: Maybe<Scalars['Int']>;
-  meetup?: Maybe<Meetup_Obj_Rel_Insert_Input>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user?: Maybe<User_Obj_Rel_Insert_Input>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** aggregate max on columns */
-export type Meetup_Message_Max_Fields = {
-   __typename?: 'meetup_message_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** order by max() on columns of table "meetup_message" */
-export type Meetup_Message_Max_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Meetup_Message_Min_Fields = {
-   __typename?: 'meetup_message_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** order by min() on columns of table "meetup_message" */
-export type Meetup_Message_Min_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "meetup_message" */
-export type Meetup_Message_Mutation_Response = {
-   __typename?: 'meetup_message_mutation_response';
-  /** number of affected rows by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data of the affected rows by the mutation */
-  returning: Array<Meetup_Message>;
-};
-
-/** input type for inserting object relation for remote table "meetup_message" */
-export type Meetup_Message_Obj_Rel_Insert_Input = {
-  data: Meetup_Message_Insert_Input;
-  on_conflict?: Maybe<Meetup_Message_On_Conflict>;
-};
-
-/** on conflict condition type for table "meetup_message" */
-export type Meetup_Message_On_Conflict = {
-  constraint: Meetup_Message_Constraint;
-  update_columns: Array<Meetup_Message_Update_Column>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
-};
-
-/** ordering options when selecting data from "meetup_message" */
-export type Meetup_Message_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup?: Maybe<Meetup_Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user?: Maybe<User_Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: "meetup_message" */
-export type Meetup_Message_Pk_Columns_Input = {
-  id: Scalars['Int'];
-};
-
-/** select columns of table "meetup_message" */
-export enum Meetup_Message_Select_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  MeetupId = 'meetup_id',
-  /** column name */
-  UserId = 'user_id'
-}
-
-/** input type for updating data in table "meetup_message" */
-export type Meetup_Message_Set_Input = {
-  id?: Maybe<Scalars['Int']>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** aggregate stddev on columns */
-export type Meetup_Message_Stddev_Fields = {
-   __typename?: 'meetup_message_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "meetup_message" */
-export type Meetup_Message_Stddev_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Meetup_Message_Stddev_Pop_Fields = {
-   __typename?: 'meetup_message_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_pop() on columns of table "meetup_message" */
-export type Meetup_Message_Stddev_Pop_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Meetup_Message_Stddev_Samp_Fields = {
-   __typename?: 'meetup_message_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_samp() on columns of table "meetup_message" */
-export type Meetup_Message_Stddev_Samp_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate sum on columns */
-export type Meetup_Message_Sum_Fields = {
-   __typename?: 'meetup_message_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-  meetup_id?: Maybe<Scalars['Int']>;
-  user_id?: Maybe<Scalars['Int']>;
-};
-
-/** order by sum() on columns of table "meetup_message" */
-export type Meetup_Message_Sum_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** update columns of table "meetup_message" */
-export enum Meetup_Message_Update_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  MeetupId = 'meetup_id',
-  /** column name */
-  UserId = 'user_id'
-}
-
-/** aggregate var_pop on columns */
-export type Meetup_Message_Var_Pop_Fields = {
-   __typename?: 'meetup_message_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_pop() on columns of table "meetup_message" */
-export type Meetup_Message_Var_Pop_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Meetup_Message_Var_Samp_Fields = {
-   __typename?: 'meetup_message_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_samp() on columns of table "meetup_message" */
-export type Meetup_Message_Var_Samp_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Meetup_Message_Variance_Fields = {
-   __typename?: 'meetup_message_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-  meetup_id?: Maybe<Scalars['Float']>;
-  user_id?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "meetup_message" */
-export type Meetup_Message_Variance_Order_By = {
-  id?: Maybe<Order_By>;
-  meetup_id?: Maybe<Order_By>;
-  user_id?: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -584,7 +589,9 @@ export type Meetup_Min_Fields = {
    __typename?: 'meetup_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   datetime?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  image_url?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -594,7 +601,9 @@ export type Meetup_Min_Fields = {
 export type Meetup_Min_Order_By = {
   created_at?: Maybe<Order_By>;
   datetime?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  image_url?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -624,11 +633,13 @@ export type Meetup_On_Conflict = {
 
 /** ordering options when selecting data from "meetup" */
 export type Meetup_Order_By = {
+  comments_aggregate?: Maybe<Meetup_Comment_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   datetime?: Maybe<Order_By>;
+  description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  image_url?: Maybe<Order_By>;
   location?: Maybe<Order_By>;
-  meetup_messages_aggregate?: Maybe<Meetup_Message_Aggregate_Order_By>;
   meetup_users_aggregate?: Maybe<Meetup_User_Aggregate_Order_By>;
   name?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -646,7 +657,11 @@ export enum Meetup_Select_Column {
   /** column name */
   Datetime = 'datetime',
   /** column name */
+  Description = 'description',
+  /** column name */
   Id = 'id',
+  /** column name */
+  ImageUrl = 'image_url',
   /** column name */
   Location = 'location',
   /** column name */
@@ -659,7 +674,9 @@ export enum Meetup_Select_Column {
 export type Meetup_Set_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
   datetime?: Maybe<Scalars['timestamptz']>;
+  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  image_url?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -716,7 +733,11 @@ export enum Meetup_Update_Column {
   /** column name */
   Datetime = 'datetime',
   /** column name */
+  Description = 'description',
+  /** column name */
   Id = 'id',
+  /** column name */
+  ImageUrl = 'image_url',
   /** column name */
   Location = 'location',
   /** column name */
@@ -1071,18 +1092,16 @@ export type Meetup_Variance_Order_By = {
 /** mutation root */
 export type Mutation_Root = {
    __typename?: 'mutation_root';
-  /** perform the action: "InsertUserAction" */
-  InsertUserAction?: Maybe<TokenOutput>;
-  /** perform the action: "actionName" */
-  actionName?: Maybe<SampleOutput>;
+  /** perform the action: "Signup" */
+  Signup?: Maybe<SignupResponse>;
   /** delete data from the table: "meetup" */
   delete_meetup?: Maybe<Meetup_Mutation_Response>;
   /** delete single row from the table: "meetup" */
   delete_meetup_by_pk?: Maybe<Meetup>;
-  /** delete data from the table: "meetup_message" */
-  delete_meetup_message?: Maybe<Meetup_Message_Mutation_Response>;
-  /** delete single row from the table: "meetup_message" */
-  delete_meetup_message_by_pk?: Maybe<Meetup_Message>;
+  /** delete data from the table: "meetup_comment" */
+  delete_meetup_comment?: Maybe<Meetup_Comment_Mutation_Response>;
+  /** delete single row from the table: "meetup_comment" */
+  delete_meetup_comment_by_pk?: Maybe<Meetup_Comment>;
   /** delete data from the table: "meetup_user" */
   delete_meetup_user?: Maybe<Meetup_User_Mutation_Response>;
   /** delete single row from the table: "meetup_user" */
@@ -1093,10 +1112,10 @@ export type Mutation_Root = {
   delete_user_by_pk?: Maybe<User>;
   /** insert data into the table: "meetup" */
   insert_meetup?: Maybe<Meetup_Mutation_Response>;
-  /** insert data into the table: "meetup_message" */
-  insert_meetup_message?: Maybe<Meetup_Message_Mutation_Response>;
-  /** insert a single row into the table: "meetup_message" */
-  insert_meetup_message_one?: Maybe<Meetup_Message>;
+  /** insert data into the table: "meetup_comment" */
+  insert_meetup_comment?: Maybe<Meetup_Comment_Mutation_Response>;
+  /** insert a single row into the table: "meetup_comment" */
+  insert_meetup_comment_one?: Maybe<Meetup_Comment>;
   /** insert a single row into the table: "meetup" */
   insert_meetup_one?: Maybe<Meetup>;
   /** insert data into the table: "meetup_user" */
@@ -1111,10 +1130,10 @@ export type Mutation_Root = {
   update_meetup?: Maybe<Meetup_Mutation_Response>;
   /** update single row of the table: "meetup" */
   update_meetup_by_pk?: Maybe<Meetup>;
-  /** update data of the table: "meetup_message" */
-  update_meetup_message?: Maybe<Meetup_Message_Mutation_Response>;
-  /** update single row of the table: "meetup_message" */
-  update_meetup_message_by_pk?: Maybe<Meetup_Message>;
+  /** update data of the table: "meetup_comment" */
+  update_meetup_comment?: Maybe<Meetup_Comment_Mutation_Response>;
+  /** update single row of the table: "meetup_comment" */
+  update_meetup_comment_by_pk?: Maybe<Meetup_Comment>;
   /** update data of the table: "meetup_user" */
   update_meetup_user?: Maybe<Meetup_User_Mutation_Response>;
   /** update single row of the table: "meetup_user" */
@@ -1127,14 +1146,9 @@ export type Mutation_Root = {
 
 
 /** mutation root */
-export type Mutation_RootInsertUserActionArgs = {
-  user_info: UserInfo;
-};
-
-
-/** mutation root */
-export type Mutation_RootActionNameArgs = {
-  arg1: SampleInput;
+export type Mutation_RootSignupArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -1151,13 +1165,13 @@ export type Mutation_RootDelete_Meetup_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Meetup_MessageArgs = {
-  where: Meetup_Message_Bool_Exp;
+export type Mutation_RootDelete_Meetup_CommentArgs = {
+  where: Meetup_Comment_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Meetup_Message_By_PkArgs = {
+export type Mutation_RootDelete_Meetup_Comment_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -1194,16 +1208,16 @@ export type Mutation_RootInsert_MeetupArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Meetup_MessageArgs = {
-  objects: Array<Meetup_Message_Insert_Input>;
-  on_conflict?: Maybe<Meetup_Message_On_Conflict>;
+export type Mutation_RootInsert_Meetup_CommentArgs = {
+  objects: Array<Meetup_Comment_Insert_Input>;
+  on_conflict?: Maybe<Meetup_Comment_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Meetup_Message_OneArgs = {
-  object: Meetup_Message_Insert_Input;
-  on_conflict?: Maybe<Meetup_Message_On_Conflict>;
+export type Mutation_RootInsert_Meetup_Comment_OneArgs = {
+  object: Meetup_Comment_Insert_Input;
+  on_conflict?: Maybe<Meetup_Comment_On_Conflict>;
 };
 
 
@@ -1259,18 +1273,18 @@ export type Mutation_RootUpdate_Meetup_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Meetup_MessageArgs = {
-  _inc?: Maybe<Meetup_Message_Inc_Input>;
-  _set?: Maybe<Meetup_Message_Set_Input>;
-  where: Meetup_Message_Bool_Exp;
+export type Mutation_RootUpdate_Meetup_CommentArgs = {
+  _inc?: Maybe<Meetup_Comment_Inc_Input>;
+  _set?: Maybe<Meetup_Comment_Set_Input>;
+  where: Meetup_Comment_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Meetup_Message_By_PkArgs = {
-  _inc?: Maybe<Meetup_Message_Inc_Input>;
-  _set?: Maybe<Meetup_Message_Set_Input>;
-  pk_columns: Meetup_Message_Pk_Columns_Input;
+export type Mutation_RootUpdate_Meetup_Comment_By_PkArgs = {
+  _inc?: Maybe<Meetup_Comment_Inc_Input>;
+  _set?: Maybe<Meetup_Comment_Set_Input>;
+  pk_columns: Meetup_Comment_Pk_Columns_Input;
 };
 
 
@@ -1324,18 +1338,20 @@ export enum Order_By {
 /** query root */
 export type Query_Root = {
    __typename?: 'query_root';
+  /** perform the action: "Login" */
+  Login?: Maybe<JsonWebToken>;
   /** fetch data from the table: "meetup" */
   meetup: Array<Meetup>;
   /** fetch aggregated fields from the table: "meetup" */
   meetup_aggregate: Meetup_Aggregate;
   /** fetch data from the table: "meetup" using primary key columns */
   meetup_by_pk?: Maybe<Meetup>;
-  /** fetch data from the table: "meetup_message" */
-  meetup_message: Array<Meetup_Message>;
-  /** fetch aggregated fields from the table: "meetup_message" */
-  meetup_message_aggregate: Meetup_Message_Aggregate;
-  /** fetch data from the table: "meetup_message" using primary key columns */
-  meetup_message_by_pk?: Maybe<Meetup_Message>;
+  /** fetch data from the table: "meetup_comment" */
+  meetup_comment: Array<Meetup_Comment>;
+  /** fetch aggregated fields from the table: "meetup_comment" */
+  meetup_comment_aggregate: Meetup_Comment_Aggregate;
+  /** fetch data from the table: "meetup_comment" using primary key columns */
+  meetup_comment_by_pk?: Maybe<Meetup_Comment>;
   /** fetch data from the table: "meetup_user" */
   meetup_user: Array<Meetup_User>;
   /** fetch aggregated fields from the table: "meetup_user" */
@@ -1348,6 +1364,13 @@ export type Query_Root = {
   user_aggregate: User_Aggregate;
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>;
+};
+
+
+/** query root */
+export type Query_RootLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -1378,27 +1401,27 @@ export type Query_RootMeetup_By_PkArgs = {
 
 
 /** query root */
-export type Query_RootMeetup_MessageArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type Query_RootMeetup_CommentArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** query root */
-export type Query_RootMeetup_Message_AggregateArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type Query_RootMeetup_Comment_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** query root */
-export type Query_RootMeetup_Message_By_PkArgs = {
+export type Query_RootMeetup_Comment_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -1457,18 +1480,20 @@ export type Query_RootUser_By_PkArgs = {
 /** subscription root */
 export type Subscription_Root = {
    __typename?: 'subscription_root';
+  /** perform the action: "Login" */
+  Login?: Maybe<JsonWebToken>;
   /** fetch data from the table: "meetup" */
   meetup: Array<Meetup>;
   /** fetch aggregated fields from the table: "meetup" */
   meetup_aggregate: Meetup_Aggregate;
   /** fetch data from the table: "meetup" using primary key columns */
   meetup_by_pk?: Maybe<Meetup>;
-  /** fetch data from the table: "meetup_message" */
-  meetup_message: Array<Meetup_Message>;
-  /** fetch aggregated fields from the table: "meetup_message" */
-  meetup_message_aggregate: Meetup_Message_Aggregate;
-  /** fetch data from the table: "meetup_message" using primary key columns */
-  meetup_message_by_pk?: Maybe<Meetup_Message>;
+  /** fetch data from the table: "meetup_comment" */
+  meetup_comment: Array<Meetup_Comment>;
+  /** fetch aggregated fields from the table: "meetup_comment" */
+  meetup_comment_aggregate: Meetup_Comment_Aggregate;
+  /** fetch data from the table: "meetup_comment" using primary key columns */
+  meetup_comment_by_pk?: Maybe<Meetup_Comment>;
   /** fetch data from the table: "meetup_user" */
   meetup_user: Array<Meetup_User>;
   /** fetch aggregated fields from the table: "meetup_user" */
@@ -1481,6 +1506,13 @@ export type Subscription_Root = {
   user_aggregate: User_Aggregate;
   /** fetch data from the table: "user" using primary key columns */
   user_by_pk?: Maybe<User>;
+};
+
+
+/** subscription root */
+export type Subscription_RootLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -1511,27 +1543,27 @@ export type Subscription_RootMeetup_By_PkArgs = {
 
 
 /** subscription root */
-export type Subscription_RootMeetup_MessageArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type Subscription_RootMeetup_CommentArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** subscription root */
-export type Subscription_RootMeetup_Message_AggregateArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type Subscription_RootMeetup_Comment_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** subscription root */
-export type Subscription_RootMeetup_Message_By_PkArgs = {
+export type Subscription_RootMeetup_Comment_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -1607,9 +1639,9 @@ export type User = {
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
   /** An array relationship */
-  meetup_messages: Array<Meetup_Message>;
+  meetup_comments: Array<Meetup_Comment>;
   /** An aggregated array relationship */
-  meetup_messages_aggregate: Meetup_Message_Aggregate;
+  meetup_comments_aggregate: Meetup_Comment_Aggregate;
   password: Scalars['String'];
   updated_at: Scalars['timestamptz'];
   /** An array relationship */
@@ -1621,22 +1653,22 @@ export type User = {
 
 
 /** columns and relationships of "user" */
-export type UserMeetup_MessagesArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type UserMeetup_CommentsArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
 /** columns and relationships of "user" */
-export type UserMeetup_Messages_AggregateArgs = {
-  distinct_on?: Maybe<Array<Meetup_Message_Select_Column>>;
+export type UserMeetup_Comments_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meetup_Comment_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Meetup_Message_Order_By>>;
-  where?: Maybe<Meetup_Message_Bool_Exp>;
+  order_by?: Maybe<Array<Meetup_Comment_Order_By>>;
+  where?: Maybe<Meetup_Comment_Bool_Exp>;
 };
 
 
@@ -1728,7 +1760,7 @@ export type User_Bool_Exp = {
   _or?: Maybe<Array<Maybe<User_Bool_Exp>>>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Int_Comparison_Exp>;
-  meetup_messages?: Maybe<Meetup_Message_Bool_Exp>;
+  meetup_comments?: Maybe<Meetup_Comment_Bool_Exp>;
   password?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_meetups?: Maybe<Meetup_User_Bool_Exp>;
@@ -1750,7 +1782,7 @@ export type User_Inc_Input = {
 export type User_Insert_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
-  meetup_messages?: Maybe<Meetup_Message_Arr_Rel_Insert_Input>;
+  meetup_comments?: Maybe<Meetup_Comment_Arr_Rel_Insert_Input>;
   password?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_meetups?: Maybe<Meetup_User_Arr_Rel_Insert_Input>;
@@ -1821,7 +1853,7 @@ export type User_On_Conflict = {
 export type User_Order_By = {
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
-  meetup_messages_aggregate?: Maybe<Meetup_Message_Aggregate_Order_By>;
+  meetup_comments_aggregate?: Maybe<Meetup_Comment_Aggregate_Order_By>;
   password?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_meetups_aggregate?: Maybe<Meetup_User_Aggregate_Order_By>;
@@ -1971,7 +2003,7 @@ export type CreateUserMutation = (
   { __typename?: 'mutation_root' }
   & { insert_user_one?: Maybe<(
     { __typename?: 'user' }
-    & Pick<User, 'id' | 'password'>
+    & Pick<User, 'username' | 'password'>
   )> }
 );
 
@@ -1988,7 +2020,7 @@ export const FindUserByUsernameDocument = gql`
 export const CreateUserDocument = gql`
     mutation createUser($username: String!, $password: String!) {
   insert_user_one(object: {username: $username, password: $password}) {
-    id
+    username
     password
   }
 }

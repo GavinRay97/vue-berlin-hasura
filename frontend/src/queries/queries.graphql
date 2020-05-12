@@ -1,0 +1,43 @@
+subscription MeetupsWithCommentsAndUser {
+  meetup {
+    id
+    name
+    datetime
+    description
+    location
+    image_url
+    comments {
+      id
+      text
+      user {
+        username
+      }
+    }
+  }
+}
+
+mutation Signup($username: String!, $password: String!) {
+  Signup(username: $username, password: $password) {
+    username
+    password
+  }
+}
+
+query Login($username: String!, $password: String!) {
+  Login(username: $username, password: $password) {
+    token
+  }
+}
+
+mutation AddComment($meetupId: Int!, $text: String!) {
+  insert_meetup_comment_one(object: { meetup_id: $meetupId, text: $text }) {
+    id
+    text
+  }
+}
+
+mutation DeleteCommentById($id: Int!) {
+  delete_meetup_comment_by_pk(id: $id) {
+    id
+  }
+}

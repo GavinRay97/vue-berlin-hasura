@@ -5,7 +5,7 @@ const HASURA_GRAPHQL_JWT_SECRET = {
   type: process.env.HASURA_JWT_SECRET_TYPE || 'HS256',
   key:
     process.env.HASURA_JWT_SECRET_KEY ||
-    'set-your-hs256-secret-signing-key-here',
+    'XM9RnWahz+qrjSJjG/RNCMTR55AWhj0BKkru9Ksr/rY=',
 }
 
 const JWT_CONFIG = {

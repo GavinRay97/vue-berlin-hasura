@@ -36,13 +36,58 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcrypt = require("bcryptjs");
 var Fastify = require("fastify");
 var graphqlRequestSdk_1 = require("./graphqlRequestSdk");
 var graphql_request_1 = require("graphql-request");
+var auth_1 = require("./auth");
 var requestClient = new graphql_request_1.GraphQLClient('http://localhost:8080/v1/graphql', {
-    headers: { 'X-Hasura-Admin-Secret': 'mysecret' },
+    headers: { 'X-Hasura-Admin-Secret': 'my-secret' },
 });
 var client = graphqlRequestSdk_1.getSdk(requestClient);
+var fastify = Fastify({
+    logger: true,
+    trustProxy: true,
+});
+fastify.post('/signup', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, username, password, hashedPassword, insert_user_one;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body.input, username = _a.username, password = _a.password;
+                return [4 /*yield*/, bcrypt.hash(password, 10)];
+            case 1:
+                hashedPassword = _b.sent();
+                return [4 /*yield*/, client.createUser({
+                        username: username,
+                        password: hashedPassword,
+                    })];
+            case 2:
+                insert_user_one = (_b.sent()).insert_user_one;
+                return [2 /*return*/, res.send(insert_user_one)];
+        }
+    });
+}); });
+fastify.post('/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, username, password, query, user, validPassword, token;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body.input, username = _a.username, password = _a.password;
+                return [4 /*yield*/, client.findUserByUsername({ username: username })];
+            case 1:
+                query = _b.sent();
+                user = query.user[0];
+                return [4 /*yield*/, bcrypt.compare(password, user.password)];
+            case 2:
+                validPassword = _b.sent();
+                if (!validPassword)
+                    return [2 /*return*/, res.status(401).send({ message: 'Invalid' })];
+                token = auth_1.generateJWT(user);
+                return [2 /*return*/, res.send({ token: token })];
+        }
+    });
+}); });
 // Google Cloud Run will set this environment variable for you, so
 // you can also use it to detect if you are running in Cloud Run
 var IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
@@ -50,22 +95,6 @@ var IS_GOOGLE_CLOUD_RUN = process.env.K_SERVICE !== undefined;
 var address = IS_GOOGLE_CLOUD_RUN ? '0.0.0.0' : undefined;
 // You must listen on the port Cloud Run provides
 var port = process.env.PORT || 3000;
-var fastify = Fastify({
-    logger: true,
-    trustProxy: true,
-});
-fastify.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, client.AllUsers()];
-            case 1:
-                users = _a.sent();
-                res.send(users);
-                return [2 /*return*/];
-        }
-    });
-}); });
 function start(server, address) {
     return __awaiter(this, void 0, void 0, function () {
         var URL;

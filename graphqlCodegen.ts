@@ -3,7 +3,7 @@ import { generate } from '@graphql-codegen/cli'
 const baseSchemaConfig = {
   'http://localhost:8080/v1/graphql': {
     headers: {
-      'X-Hasura-Admin-Secret': 'mysecret',
+      'X-Hasura-Admin-Secret': 'my-secret',
     },
   },
 }

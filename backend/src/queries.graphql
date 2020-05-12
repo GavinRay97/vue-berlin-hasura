@@ -8,7 +8,7 @@ query findUserByUsername($username: String!) {
 
 mutation createUser($username: String!, $password: String!) {
   insert_user_one(object: { username: $username, password: $password }) {
-    id
+    username
     password
   }
 }

@@ -1,15 +1,12 @@
 <template>
   <li class="rounded-md lg:w-1/3 md:w-1/2 w-full">
-    <img
-      src="https://images.unsplash.com/photo-1576085898323-218337e3e43c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80"
-      class="rounded-t-md object-cover h-56 w-full"
-    />
+    <img :src="image_url" class="rounded-t-md object-cover h-56 w-full" />
     <div class="p-4 border rounded-b-md">
       <div class="border-b pb-4">
         <div class="mb-4">
-          <h1 class="text-xl font-bold">Vue Meetup</h1>
+          <h1 class="text-xl font-bold">{{ name }}</h1>
           <div class="flex items-inline justify-between">
-            <p>Mar. 4th 2001 @ 8PM</p>
+            <p>{{ datetime }}</p>
             <div class="flex items-center">
               <div class="flex items-center mr-8">
                 <users-icon class="mr-2" size="1x"></users-icon>
@@ -17,54 +14,75 @@
               </div>
               <div class="flex items-center">
                 <map-pin-icon class="mr-2" size="1x"></map-pin-icon>
-                <p>Berlin</p>
+                <p>{{ location }}</p>
               </div>
             </div>
           </div>
         </div>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias
-          aliquam aliquid at debitis dicta dolor doloribus eius est harum id
-          iste itaque.
+          {{ description }}
         </p>
       </div>
-      <div class="pt-4 mb-4">
-        <ul class="space-y-2">
-          <li>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center">
-              <img src="https://pbs.twimg.com/profile_images/1258390180190281728/x-Yuqz_W_400x400.jpg" class="w-4 h-4 rounded-full mr-2"></img>
-              <div class="italic">This is cool!</div>
-               </div>
-              <button class="text-red-500 hover:text-red-700 duration-200 transition"><x-circle-icon size="1x"></x-circle-icon>
-            </button>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <button class="text-white w-full bg-black rounded-md px-3 py-1 hover:bg-gray-900 duration-200 transition" @click="addComment = true" v-if="!addComment">Add a comment</button>
+      <Comment
+        v-for="userComment in comments"
+        :id="userComment.id"
+        :key="userComment.text"
+        :text="userComment.text"
+        :user="userComment.user"
+      ></Comment>
+      <button
+        class="text-white w-full bg-black rounded-md px-3 py-1 hover:bg-gray-900 duration-200 transition"
+        @click="addComment = true"
+        v-if="!addComment"
+      >
+        Add a comment
+      </button>
       <div v-else>
-        <textarea class="border w-full rounded-md px-3 py-1 mb-2" placeholder="Add a comment" v-model="comment"></textarea>
-        <button class="text-white w-full bg-black rounded-md px-3 py-1 hover:bg-gray-900 duration-200 transition">Submit</button>
+        <textarea
+          class="border w-full rounded-md px-3 py-1 mb-2"
+          placeholder="Add a comment"
+          v-model="comment"
+        ></textarea>
+        <button
+          @click="addCommentMutation({ meetupId: id, text: comment })"
+          class="text-white w-full bg-black rounded-md px-3 py-1 hover:bg-gray-900 duration-200 transition"
+        >
+          Submit
+        </button>
       </div>
     </div>
   </li>
 </template>
 
-<script>
+<script lang="ts">
 import { UsersIcon, MapPinIcon, XCircleIcon } from 'vue-feather-icons'
+import { defineComponent } from '@vue/composition-api'
+import { useAddCommentMutation } from '../apolloGraphQLSdk'
+import Comment from './Comment.vue'
 
-export default {
+export default defineComponent({
   components: {
     UsersIcon,
     MapPinIcon,
-    XCircleIcon
+    XCircleIcon,
+    Comment,
   },
-  data: function () {
+  props: {
+    id: Number,
+    name: String,
+    location: String,
+    description: String,
+    image_url: String,
+    datetime: String,
+    comments: Array as any,
+  },
+  setup() {
+    const { mutate: addCommentMutation } = useAddCommentMutation({} as any)
     return {
       addComment: false,
-      comment: ''
+      comment: '',
+      addCommentMutation,
     }
   },
-}
+})
 </script>

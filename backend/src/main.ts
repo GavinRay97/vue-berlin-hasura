@@ -5,9 +5,12 @@ import { getSdk } from './graphqlRequestSdk'
 import { GraphQLClient } from 'graphql-request'
 import { generateJWT } from './auth'
 
-const requestClient = new GraphQLClient('http://localhost:8080/v1/graphql', {
-  headers: { 'X-Hasura-Admin-Secret': 'mysecret' },
-})
+const requestClient = new GraphQLClient(
+  'http://graphql-engine:8080/v1/graphql',
+  {
+    headers: { 'X-Hasura-Admin-Secret': 'my-secret' },
+  }
+)
 const client = getSdk(requestClient)
 
 const fastify: FastifyInstance = Fastify({

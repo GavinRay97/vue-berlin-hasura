@@ -6,44 +6,42 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
 Object.defineProperty(exports, "__esModule", { value: true });
 var graphql_1 = require("graphql");
 var graphql_tag_1 = require("graphql-tag");
-var Some_Enum;
-(function (Some_Enum) {
-    Some_Enum["TypeA"] = "TYPE_A";
-    Some_Enum["TypeB"] = "TYPE_B";
-    Some_Enum["TypeC"] = "TYPE_C";
-})(Some_Enum = exports.Some_Enum || (exports.Some_Enum = {}));
+/** unique or primary key constraints on table "meetup_comment" */
+var Meetup_Comment_Constraint;
+(function (Meetup_Comment_Constraint) {
+    /** unique or primary key constraint */
+    Meetup_Comment_Constraint["MeetupCommentPkey"] = "meetup_comment_pkey";
+})(Meetup_Comment_Constraint = exports.Meetup_Comment_Constraint || (exports.Meetup_Comment_Constraint = {}));
+/** select columns of table "meetup_comment" */
+var Meetup_Comment_Select_Column;
+(function (Meetup_Comment_Select_Column) {
+    /** column name */
+    Meetup_Comment_Select_Column["Id"] = "id";
+    /** column name */
+    Meetup_Comment_Select_Column["MeetupId"] = "meetup_id";
+    /** column name */
+    Meetup_Comment_Select_Column["Text"] = "text";
+    /** column name */
+    Meetup_Comment_Select_Column["UserId"] = "user_id";
+})(Meetup_Comment_Select_Column = exports.Meetup_Comment_Select_Column || (exports.Meetup_Comment_Select_Column = {}));
+/** update columns of table "meetup_comment" */
+var Meetup_Comment_Update_Column;
+(function (Meetup_Comment_Update_Column) {
+    /** column name */
+    Meetup_Comment_Update_Column["Id"] = "id";
+    /** column name */
+    Meetup_Comment_Update_Column["MeetupId"] = "meetup_id";
+    /** column name */
+    Meetup_Comment_Update_Column["Text"] = "text";
+    /** column name */
+    Meetup_Comment_Update_Column["UserId"] = "user_id";
+})(Meetup_Comment_Update_Column = exports.Meetup_Comment_Update_Column || (exports.Meetup_Comment_Update_Column = {}));
 /** unique or primary key constraints on table "meetup" */
 var Meetup_Constraint;
 (function (Meetup_Constraint) {
     /** unique or primary key constraint */
     Meetup_Constraint["MeetupPkey"] = "meetup_pkey";
 })(Meetup_Constraint = exports.Meetup_Constraint || (exports.Meetup_Constraint = {}));
-/** unique or primary key constraints on table "meetup_message" */
-var Meetup_Message_Constraint;
-(function (Meetup_Message_Constraint) {
-    /** unique or primary key constraint */
-    Meetup_Message_Constraint["MeetupMessagePkey"] = "meetup_message_pkey";
-})(Meetup_Message_Constraint = exports.Meetup_Message_Constraint || (exports.Meetup_Message_Constraint = {}));
-/** select columns of table "meetup_message" */
-var Meetup_Message_Select_Column;
-(function (Meetup_Message_Select_Column) {
-    /** column name */
-    Meetup_Message_Select_Column["Id"] = "id";
-    /** column name */
-    Meetup_Message_Select_Column["MeetupId"] = "meetup_id";
-    /** column name */
-    Meetup_Message_Select_Column["UserId"] = "user_id";
-})(Meetup_Message_Select_Column = exports.Meetup_Message_Select_Column || (exports.Meetup_Message_Select_Column = {}));
-/** update columns of table "meetup_message" */
-var Meetup_Message_Update_Column;
-(function (Meetup_Message_Update_Column) {
-    /** column name */
-    Meetup_Message_Update_Column["Id"] = "id";
-    /** column name */
-    Meetup_Message_Update_Column["MeetupId"] = "meetup_id";
-    /** column name */
-    Meetup_Message_Update_Column["UserId"] = "user_id";
-})(Meetup_Message_Update_Column = exports.Meetup_Message_Update_Column || (exports.Meetup_Message_Update_Column = {}));
 /** select columns of table "meetup" */
 var Meetup_Select_Column;
 (function (Meetup_Select_Column) {
@@ -52,7 +50,11 @@ var Meetup_Select_Column;
     /** column name */
     Meetup_Select_Column["Datetime"] = "datetime";
     /** column name */
+    Meetup_Select_Column["Description"] = "description";
+    /** column name */
     Meetup_Select_Column["Id"] = "id";
+    /** column name */
+    Meetup_Select_Column["ImageUrl"] = "image_url";
     /** column name */
     Meetup_Select_Column["Location"] = "location";
     /** column name */
@@ -68,7 +70,11 @@ var Meetup_Update_Column;
     /** column name */
     Meetup_Update_Column["Datetime"] = "datetime";
     /** column name */
+    Meetup_Update_Column["Description"] = "description";
+    /** column name */
     Meetup_Update_Column["Id"] = "id";
+    /** column name */
+    Meetup_Update_Column["ImageUrl"] = "image_url";
     /** column name */
     Meetup_Update_Column["Location"] = "location";
     /** column name */
@@ -152,15 +158,19 @@ var User_Update_Column;
     /** column name */
     User_Update_Column["Username"] = "username";
 })(User_Update_Column = exports.User_Update_Column || (exports.User_Update_Column = {}));
-exports.AllUsersDocument = graphql_tag_1.default(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    query AllUsers {\n  user {\n    id\n    username\n  }\n}\n    "], ["\n    query AllUsers {\n  user {\n    id\n    username\n  }\n}\n    "])));
+exports.FindUserByUsernameDocument = graphql_tag_1.default(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    query findUserByUsername($username: String!) {\n  user(where: {username: {_eq: $username}}) {\n    id\n    username\n    password\n  }\n}\n    "], ["\n    query findUserByUsername($username: String!) {\n  user(where: {username: {_eq: $username}}) {\n    id\n    username\n    password\n  }\n}\n    "])));
+exports.CreateUserDocument = graphql_tag_1.default(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    mutation createUser($username: String!, $password: String!) {\n  insert_user_one(object: {username: $username, password: $password}) {\n    id\n    password\n  }\n}\n    "], ["\n    mutation createUser($username: String!, $password: String!) {\n  insert_user_one(object: {username: $username, password: $password}) {\n    id\n    password\n  }\n}\n    "])));
 var defaultWrapper = function (sdkFunction) { return sdkFunction(); };
 function getSdk(client, withWrapper) {
     if (withWrapper === void 0) { withWrapper = defaultWrapper; }
     return {
-        AllUsers: function (variables) {
-            return withWrapper(function () { return client.request(graphql_1.print(exports.AllUsersDocument), variables); });
+        findUserByUsername: function (variables) {
+            return withWrapper(function () { return client.request(graphql_1.print(exports.FindUserByUsernameDocument), variables); });
+        },
+        createUser: function (variables) {
+            return withWrapper(function () { return client.request(graphql_1.print(exports.CreateUserDocument), variables); });
         }
     };
 }
 exports.getSdk = getSdk;
-var templateObject_1;
+var templateObject_1, templateObject_2;

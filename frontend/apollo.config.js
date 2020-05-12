@@ -4,6 +4,9 @@ module.exports = {
     service: {
       name: 'Hasura',
       url: 'http://localhost:8080/v1/graphql',
+      headers: {
+        'X-Hasura-Admin-Secret': 'my-secret',
+      },
     },
     // Files processed by the extension
     includes: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.graphql'],
