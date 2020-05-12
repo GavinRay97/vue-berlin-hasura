@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Gavin",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "tsc",
+    "start-prod": "node ./build/main.js",
+    "dev": "nodemon src/main.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "fastify": "^2.14.1",
+    "graphql": "^15.0.0",
+    "graphql-request": "^1.8.2",
+    "graphql-tag": "^2.10.3",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^13.13.5",
+    "typescript": "^3.8.3"
+  }
+}

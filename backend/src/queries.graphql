@@ -1,0 +1,14 @@
+query findUserByUsername($username: String!) {
+  user(where: { username: { _eq: $username } }) {
+    id
+    username
+    password
+  }
+}
+
+mutation createUser($username: String!, $password: String!) {
+  insert_user_one(object: { username: $username, password: $password }) {
+    id
+    password
+  }
+}

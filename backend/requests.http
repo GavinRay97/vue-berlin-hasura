@@ -1,0 +1,21 @@
+### Sign Up
+POST http://localhost:3000/signup HTTP/1.1
+content-type: application/json
+
+{
+  "input": {
+    "username": "user1",
+    "password": "password123"
+  }
+}
+
+### Login
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+  "input": {
+    "username": "user1",
+    "password": "password123"
+  }
+}
