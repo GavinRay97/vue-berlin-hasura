@@ -1,0 +1,27 @@
+type Query {
+  Login (
+    username: String!
+    password: String!
+  ): JsonWebToken
+}
+
+
+type Mutation {
+  Signup (
+    username: String!
+    password: String!
+  ): SignupResponse
+}
+
+
+
+
+type SignupResponse {
+  username : String!
+  password : String!
+}
+
+type JsonWebToken {
+  token : String!
+}
+

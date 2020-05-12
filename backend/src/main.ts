@@ -31,8 +31,8 @@ fastify.post('/login', async (req, res) => {
   const [user] = query.user
   const validPassword = await bcrypt.compare(password, user.password)
   if (!validPassword) return res.status(401).send({ message: 'Invalid' })
-  const jwt = generateJWT(user)
-  return res.send(jwt)
+  const token = generateJWT(user)
+  return res.send({ token })
 })
 
 // Google Cloud Run will set this environment variable for you, so

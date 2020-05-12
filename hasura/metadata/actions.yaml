@@ -1,6 +1,16 @@
-actions: []
+actions:
+- name: Login
+  definition:
+    kind: ""
+    handler: http://localhost:3000/login
+- name: Signup
+  definition:
+    kind: synchronous
+    handler: http://localhost:3000/signup
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+  - name: SignupResponse
+  - name: JsonWebToken
   scalars: []
