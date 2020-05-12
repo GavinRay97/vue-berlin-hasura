@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import router from './router'
+
+import './assets/css/tailwind.css'
+
 import VueApollo from '@vue/apollo-option'
 import VueApolloComponents from '@vue/apollo-components'
 import VueCompositionApi from '@vue/composition-api'
@@ -24,5 +28,6 @@ new Vue({
   setup(): any {
     provide(DefaultApolloClient, apolloClient)
   },
+  router,
   render: (h) => h(App),
 }).$mount('#app')
