@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "fastify": "^2.14.1",
+    "fastify": "^2.15.1",
     "graphql": "^15.0.0",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.3",
